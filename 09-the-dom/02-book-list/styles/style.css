@@ -1,0 +1,15 @@
+.alreadyRead{
+    color:rgb(11, 134, 11);
+}
+
+.alreadyRead::before{
+    content: "✔ ";
+}
+
+.notRead{
+    color:rgb(128, 0, 0);
+}
+
+.notRead::before{
+    content: "✖ ";
+}

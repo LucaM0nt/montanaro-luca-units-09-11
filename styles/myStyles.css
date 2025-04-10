@@ -1,0 +1,175 @@
+/** 
+* myStyles.css
+*
+* These styles are the ones I usually use to style my HTML files.
+* These styles are not actively part of any exercise and this is just a personal file 
+* to style the presentation.
+*/
+
+/* The body uses a flexible layout to ensure the footer stays at the bottom of the page,
+   even when the main content doesn't fill the viewport. */
+   body {
+    font-family: Montserrat, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* The header is styled with a dark background and white text, centered for clarity. */
+header {
+    background-color: #2c0331;
+    color: #fff;
+    padding: 0.5rem 0;
+    text-align: center;
+}
+
+/* Removes default margin from the header title. */
+header h1 {
+    margin: 0;
+}
+
+/* Removes default list styles for navigation and spacing. */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Displays navigation items inline and adds horizontal spacing. */
+nav ul li {
+    display: inline;
+    margin: 0 1rem;
+}
+
+/* Styles navigation links to be white and without underline. */
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* The main container has internal padding, is centered, and has a minimum width for layout consistency. */
+main {
+    padding: 2rem;
+    min-width: 800px;
+    margin: 0 auto;
+    flex: 1;
+}
+
+/* Each section has vertical spacing from the next. */
+section {
+    margin-bottom: 2rem;
+}
+
+/* Section titles include a bottom border for visual separation. */
+section h2 {
+    border-bottom: 2px solid #333;
+    padding-bottom: 0.5rem;
+}
+
+/* Removes default list styling of exercises inside main. */
+.exercises ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Adds vertical spacing between exercise list items. */
+section ul li {
+    margin: 0.5rem 0;
+}
+
+/* Exercises are arranged in rows with spacing between the title link and additional links. */
+.exercise {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+/* Styles the main exercise link with a distinct color and margin. */
+.exercise a {
+    color: #721e8b;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+/* Adds underline on hover for better accessibility. */
+.exercise a:hover {
+    text-decoration: underline;
+}
+
+/* Container for extra links (e.g., Readme, JSDoc), arranged horizontally with spacing. */
+.links {
+    display: flex;
+    gap: 10px;
+}
+
+/* Additional links are smaller and have a muted color. */
+.links a {
+    font-size: 0.9em;
+    color: #4f0852;
+}
+
+/* Adds underline on hover for the additional links. */
+.links a:hover {
+    text-decoration: underline;
+}
+
+/* Adds a subtle horizontal divider behind each exercise item. */
+.exercise::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ddd;
+    z-index: -1;
+}
+
+/* Highlights the first link in the exercise (the main one) with a background and padding. */
+.exercise a:first-child {
+    background: #f4f4f4;
+    padding-right: 10px;
+}
+
+/* Ensures the .links container has background and padding for visual separation. */
+.links {
+    background: #f4f4f4;
+    padding-left: 10px;
+}
+
+/* Footer is styled to stay at the bottom with centered white content and spacing. */
+footer {
+    background-color: #2c0331;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Removes default margin from footer paragraphs. */
+footer p {
+    margin: 0;
+}
+
+/* Aligns the GitHub icon and username next to each other. */
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+}
+
+/* Ensures GitHub profile links have the correct alignment. */
+.profile a {
+    display: flex;
+    align-items: center;
+}
