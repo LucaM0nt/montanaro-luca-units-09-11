@@ -13,16 +13,6 @@ let books = [
   },
 ];
 
-// let hobbiesListElement = document.getElementById('hobby-list');
-// let firstHobby = document.querySelector('ul li.hobby');
-// let hobbies = document.getElementsByTagName('li');
-// let alsoHobbies = document.getElementsByClassName('hobby');
-// let allItems = document.querySelectorAll('ul li.hobby');
-
-// let newImgElement = document.createElement("img");
-// newImgElement.src = "https://picsum.photos/200/200";
-// siteUlElement.append(newImgElement);
-
 let exerciseSection = document.querySelector("main section:nth-of-type(2)");
 let newUlElement = document.createElement("ul");
 exerciseSection.appendChild(newUlElement);
