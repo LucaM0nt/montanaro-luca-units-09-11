@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: sans-serif;
+  }
+  
+th, td {
+border: 1px solid #ccc;
+padding: 8px 12px;
+text-align: left;
+}
+
+th {
+background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+background-color: #f9f9f9;
+}
+
+tr:nth-child(odd) {
+background-color: #ffffff;
+}
+
+table tr.delayed {
+background-color: red;
+color: antiquewhite;
+}
+  

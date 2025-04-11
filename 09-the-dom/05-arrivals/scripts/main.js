@@ -142,7 +142,8 @@ function updateFlightStatus() {
     return; // Exit early if there are no flights to update
   }
 
-  flightsToRender.forEach((flight, index) => {
+  flightsToRender.forEach((flight) => {
+    let flightDelayedRandomizer = randomInt(0, 1);
     switch (flight.status) {
       case "Landed":
         flight.status = "At Gate";
@@ -154,11 +155,20 @@ function updateFlightStatus() {
         flight.status = "Gate Closed";
         break;
       case "Gate Closed":
-        flight.status = "Departing";
+        if ((flightDelayedRandomizer == 0)) {
+          flight.status = "Departing";
+        } else {
+          flight.status = "Delayed";
+        }
+        break;
+      case "Delayed":
+        if ((flightDelayedRandomizer == 0)) {
+          flight.status = "Departing";
+        };
         break;
       case "Departing":
         flight.status = "In Flight";
-        setTimeout(removeDepartedFlight, 5000, flight);
+        setTimeout(removeDepartedFlight, 60000, flight);
         break;
     }
   });
@@ -168,7 +178,7 @@ function renderFlights() {
   while (table.rows.length > 1) {
     table.deleteRow(1);
   }
-  
+
   if (flightsToRender.length == 0) {
     return;
   }
@@ -186,6 +196,7 @@ function renderFlights() {
       flight.scheduledArrival,
       flight.status,
     ];
+    flight.status == "Delayed" ? (tRow.className = "delayed") : null;
     flightInfos.forEach((text) => {
       let tData = document.createElement("td");
       tData.textContent = text;
@@ -220,3 +231,10 @@ flightsData.forEach((headerText) => {
 });
 table.appendChild(headerRow);
 exerciseSection.appendChild(table);
+
+let siteHead = document.head;
+let newStylesheetLink = document.createElement("link");
+newStylesheetLink.rel = "stylesheet";
+newStylesheetLink.href = "./styles/style.css";
+console.log(newStylesheetLink);
+siteHead.appendChild(newStylesheetLink);
