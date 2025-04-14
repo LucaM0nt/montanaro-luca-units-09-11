@@ -1,3 +1,16 @@
+/** 
+* styles.css
+*
+* These styles are the ones for the current's folder exercise
+*/
+
+/* This style is the one required by the assignment, 
+while the others are just for formatting the table. */
+table tr.delayed {
+  background-color: red;
+  color: antiquewhite;
+  }
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -20,10 +33,5 @@ background-color: #f9f9f9;
 
 tr:nth-child(odd) {
 background-color: #ffffff;
-}
-
-table tr.delayed {
-background-color: red;
-color: antiquewhite;
 }
   

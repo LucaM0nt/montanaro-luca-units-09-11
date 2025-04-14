@@ -1,11 +1,19 @@
+/** 
+* styles.css
+*
+* These styles are the ones for the current's folder exercise
+*/
+
+/* For the alreadyRead class we add a checkmark before and make it green */
 .alreadyRead{
     color:rgb(11, 134, 11);
 }
-
 .alreadyRead::before{
     content: "✔ ";
 }
 
+
+/* For the notRead class we add an ex before and make it red */
 .notRead{
     color:rgb(128, 0, 0);
 }

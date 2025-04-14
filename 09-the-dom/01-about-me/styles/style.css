@@ -1,3 +1,11 @@
+/** 
+* styles.css
+*
+* These styles are the ones for the current's folder exercise
+*/
+
+/* This style applies the exercise specifics
+to the elements with the .list-item class */
 .list-item{
     color: white;
     background-color: orange;
