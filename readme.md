@@ -13,7 +13,7 @@ Alternatively, there's a handy [`index.html`](./index.html) in the main folder t
 ## Structure 🗂️
 
 - **Unit 09**: The DOM
-- **Unit 10**: ???
+- **Unit 10**: Events and Listeners
 - **Unit 11**: ???
 
 ## Technologies Used 🛠️

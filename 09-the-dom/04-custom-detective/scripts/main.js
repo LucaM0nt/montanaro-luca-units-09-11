@@ -1,3 +1,19 @@
+/**
+ * @file main.js
+ * @description This script inspects the DOM of the HDblog.it website and retrieves specific elements using various DOM querying methods.
+ * It demonstrates how to use JavaScript to explore and interact with the structure of a webpage.
+ * @author Luca Montanaro
+ * @date April, 2025
+ * 
+ * @remarks
+ * This exercise involves using browser developer tools to inspect the DOM of HDblog.it and running JavaScript in the console to identify specific elements on the page. 
+ * The goal was to locate at least 10 different elements or groups of elements using a variety of DOM querying methods. 
+ * The script demonstrates the use of techniques such as `querySelector`, `querySelectorAll`, `getElementsByClassName`, `getElementById`, 
+ * and `getElementsByTagName` to retrieve elements like headings, links, images, and containers. Additionally, it includes the use of complex CSS selectors 
+ * to target elements with precision, such as selecting images with specific attributes or links within specific articles. 
+ * This exercise highlights how JavaScript can be used to explore and manipulate the DOM, providing a deeper understanding of web page structure and programmatic interaction.
+ */
+
 document.querySelector("article h2")
 // <h2>​…​</h2>​
 
