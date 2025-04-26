@@ -1,0 +1,8 @@
+.content div{
+    margin-bottom: 10px;
+}
+
+#solution {
+    font-weight: bold;
+    color: green;
+}

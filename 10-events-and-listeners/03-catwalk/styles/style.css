@@ -1,0 +1,33 @@
+main section:nth-of-type(2) {
+ min-height: 350px;
+}
+
+body {
+    overflow: hidden;
+}
+
+.content img {
+    top: 380px;
+    left: -270px;
+}
+
+button {
+    background-color: #6c1e99;
+    color: white;
+    padding: 6px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.5s;
+  }
+
+button:hover {
+    background-color: #430f61;
+}
+  
+button:disabled {
+    background-color: #4c3a57;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+  
