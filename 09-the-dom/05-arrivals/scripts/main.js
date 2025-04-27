@@ -175,7 +175,7 @@ function randomInt(min, max) {
  * @returns {void} This function does not return a value.
  */
 function incomingFlightsToRender() { //moves incoming flights to rendered table array
-  let flightToMove = incomingFlights.shift();
+  let flightToMove = flightsDatabase.shift();
   if (flightToMove) {
     flightsToRender.push(flightToMove);
   }
@@ -306,12 +306,12 @@ let table = document.createElement("table");
  * @type {HTMLTableRowElement}
  */
 let headerRow = document.createElement("tr");
-flightsData.forEach((headerText) => { // Add table headers
+flightsDatabase.forEach((headerText) => { // Add table headers
   let tHead = document.createElement("th");
   tHead.textContent = headerText;
-  headerRow.appendChild(tHead);
+  headerRowArrival.appendChild(tHead);
 });
-table.appendChild(headerRow);
+table.appendChild(headerRowArrival);
 exerciseSection.appendChild(table);
 
 /**

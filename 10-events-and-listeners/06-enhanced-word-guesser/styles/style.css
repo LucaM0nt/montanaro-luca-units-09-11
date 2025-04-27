@@ -1,0 +1,21 @@
+/* buttons style */
+.letter-button {
+    background-color: #6c1e99;
+    color: white;
+    padding: 6px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.5s;
+    margin: 5px 5px;
+  }
+
+.letter-button:hover {
+    background-color: #430f61;
+}
+  
+.letter-button:disabled {
+    background-color: #4c3a57;
+    cursor: not-allowed;
+    opacity: 0.6;
+}

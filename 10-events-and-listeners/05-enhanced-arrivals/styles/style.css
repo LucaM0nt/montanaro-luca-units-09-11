@@ -1,0 +1,57 @@
+/** 
+* styles.css
+*
+* These styles are the ones for the current's folder exercise
+*/
+
+/* This style is the one required by the assignment, 
+while the others are just for formatting the table. */
+table tr.delayed {
+    background-color: red;
+    color: antiquewhite;
+    }
+  
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: sans-serif;
+    }
+    
+  th, td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+  }
+  
+  th {
+  background-color: #f4f4f4;
+  }
+  
+  tr:nth-child(even) {
+  background-color: #f9f9f9;
+  }
+  
+  tr:nth-child(odd) {
+  background-color: #ffffff;
+  }
+    
+  /* fade animations */
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.3s ease-in;
+}
+
+/* expanded details styling */
+.flight-details {
+  padding: 10px;
+  font-size: 0.9rem;
+}
+
+.details-row td{
+  background-color: rgb(228, 228, 228);
+}
