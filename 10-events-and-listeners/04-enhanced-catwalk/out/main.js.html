@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>main.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#catImg">catImg</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#catLoop">catLoop</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#catLoopIntervalId">catLoopIntervalId</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#catSpeed">catSpeed</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#catWalk">catWalk</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#catWalkInfo">catWalkInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#fasterButton">fasterButton</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#mainSection">mainSection</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#slowerButton">slowerButton</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#startButton">startButton</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#stopButton">stopButton</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">main.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file main.js
+ * @description This script animates a cat walking across the screen with adjustable speed. Users can start, stop, speed up, or slow down the cat's movement using buttons.
+ * It demonstrates DOM manipulation, event handling, and interval-based animations with dynamic speed adjustments.
+ * @author Luca Montanaro
+ * @date April, 2025
+ * 
+ * @remarks This script enhances the basic cat walk animation by introducing speed control. Users can interact with buttons to adjust the cat's speed dynamically.
+ * The script uses interval-based animations to move the cat image across the screen and updates the DOM to reflect the current state of the animation.
+ * It also includes state management to enable or disable buttons based on the current animation state, ensuring a smooth user experience.
+ */
+
+/**
+ * The interval ID for the cat loop animation.
+ * @type {number | null}
+ */
+let catLoopIntervalId;
+
+/**
+ * The current speed of the cat's movement.
+ * @type {number}
+ */
+let catSpeed = 15;
+
+/**
+ * The cat image element used for the animation.
+ * @type {HTMLImageElement}
+ */
+let catImg = document.querySelector(
+  "img[src='http://www.anniemation.com/clip_art/images/cat-walk.gif']"
+);
+
+/**
+ * Moves the cat in the specified direction at the specified speed.
+ * @param {HTMLImageElement} cat - The cat image element to animate.
+ * @param {string} [direction="right"] - The direction of movement ("right" or "left").
+ * @param {number} [speed=15] - The speed of the cat's movement.
+ * @returns {void}
+ */
+function catWalk(cat, direction = "right", speed = 15) {
+  const dir = direction === "left" ? -1 : 1; // Converts "left" or "right" to a numeric direction
+  const currentLeft = parseInt(getComputedStyle(cat).left) || 0; // Gets the current "left" position of the cat
+  cat.style.left = currentLeft + speed * dir + "px"; // Updates the "left" position
+}
+
+/**
+ * Starts the cat loop animation, where the cat reappears on the left after exiting the right side.
+ * @param {HTMLImageElement} cat - The cat image element to animate.
+ * @param {number} [speed=15] - The speed of the cat's movement.
+ * @returns {void}
+ */
+function catLoop(cat, speed = 15) {
+  if (!cat.style.left) cat.style.left = "-270px"; // Initializes the cat's position if not already set
+
+  catLoopIntervalId = setInterval(() => {
+    const catLeft = parseInt(cat.style.left);
+    const catWidth = cat.offsetWidth; // Gets the width of the cat image
+    const windowWidth = window.innerWidth; // Gets the width of the browser window
+
+    if (catLeft > windowWidth) {
+      cat.style.left = "-" + catWidth + "px"; // Resets the cat to the left side
+    }
+    catWalk(cat, "right", speed);
+  }, 50);
+}
+
+/**
+ * The paragraph element used to display information about the cat's current state.
+ * @type {HTMLParagraphElement}
+ */
+let catWalkInfo = document.createElement("p");
+catWalkInfo.textContent = "Make the cat come pressing `Start`";
+
+/**
+ * The main section where the cat walk information is displayed.
+ * @type {HTMLElement}
+ */
+let mainSection = document.querySelector("main section:nth-of-type(2)");
+mainSection.appendChild(catWalkInfo);
+
+// Event listeners for the buttons
+
+/**
+ * The button for starting the cat loop animation.
+ * @type {HTMLButtonElement}
+ */
+let startButton = document.getElementById("start");
+startButton.addEventListener("click", () => {
+  catLoop(catImg, catSpeed);
+  catWalkInfo.textContent = "Cat is walking at average speed";
+  startButton.disabled = true;
+  stopButton.disabled = false;
+  slowerButton.disabled = false;
+  fasterButton.disabled = false;
+});
+
+/**
+ * The button for stopping the cat loop animation.
+ * @type {HTMLButtonElement}
+ */
+let stopButton = document.getElementById("stop");
+stopButton.addEventListener("click", () => {
+  catSpeed = 15; // Resets the speed to the default value
+  clearInterval(catLoopIntervalId); // Stops the animation
+  catWalkInfo.textContent = "Cat stopped";
+  stopButton.disabled = true;
+  startButton.disabled = false;
+  slowerButton.disabled = true;
+  fasterButton.disabled = true;
+});
+
+/**
+ * The button for increasing the cat's speed.
+ * @type {HTMLButtonElement}
+ */
+let fasterButton = document.getElementById("faster");
+fasterButton.addEventListener("click", () => {
+  catSpeed += 5; // Increases the speed
+  clearInterval(catLoopIntervalId); // Restarts the animation with the new speed
+  catWalkInfo.textContent = `Cat is walking at a speed of ${catSpeed}`;
+  catLoop(catImg, catSpeed);
+});
+
+/**
+ * The button for decreasing the cat's speed.
+ * @type {HTMLButtonElement}
+ */
+let slowerButton = document.getElementById("slower");
+slowerButton.addEventListener("click", () => {
+  catSpeed -= 5; // Decreases the speed
+  if (catSpeed === 0) {
+    clearInterval(catLoopIntervalId); // Stops the animation if the speed reaches 0
+    catSpeed = 15; // Resets the speed to the default value
+    catWalkInfo.textContent = "Cat stopped";
+    stopButton.disabled = true;
+    startButton.disabled = false;
+    slowerButton.disabled = true;
+    fasterButton.disabled = true;
+    return;
+  }
+  clearInterval(catLoopIntervalId); // Restarts the animation with the new speed
+  catWalkInfo.textContent = `Cat is walking at a speed of ${catSpeed}`;
+  catLoop(catImg, catSpeed);
+});
+
+// Initial button states
+stopButton.disabled = true;
+startButton.disabled = false;
+slowerButton.disabled = true;
+fasterButton.disabled = true;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a> on Tue Apr 29 2025 14:31:28 GMT+0200 (Ora legale dell’Europa centrale) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

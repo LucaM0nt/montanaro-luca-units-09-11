@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>main.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createInput">createInput</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createRow">createRow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#gameInitializer">gameInitializer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#gameOver">gameOver</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getRandomInt">getRandomInt</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#guessLetter">guessLetter</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#guessedLetters">guessedLetters</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#guessesLeft">guessesLeft</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#hangmanImg">hangmanImg</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#isGameRunning">isGameRunning</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#maxGuessNumber">maxGuessNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#possibleWords">possibleWords</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#totalPoints">totalPoints</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#usedLetters">usedLetters</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#wordToGuess">wordToGuess</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">main.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file main.js
+ * @description This script implements the Enhanced Word Guesser game. Players guess letters to reveal a hidden word, 
+ * with a limited number of incorrect guesses allowed. 
+ * @date April, 2025
+ * @author Luca Montanaro
+ * 
+ * @remarks
+ * This script demonstrates the use of DOM manipulation, event handling, and game logic in JavaScript. 
+ * The game includes a dynamic UI with buttons for each letter, a reset button, and real-time feedback on the player's progress.
+ * It dynamically generates a keyboard for letter input, updates the game state based on user interactions, 
+ * and provides visual feedback using a hangman-style representation. The game tracks guessed letters, remaining guesses, 
+ * and total points, and it handles game initialization and reset functionality. 
+ * This example highlights the importance of managing state and dynamically updating the UI in interactive web applications.
+ */
+
+/**
+ * List of possible words for the game.
+ * @type {string[]}
+ */
+const possibleWords = [
+  "DOG",
+  "CAT",
+  "HORSE",
+  "RABBIT",
+  "BIRD",
+  "FISH",
+  "TURTLE",
+  "SNAKE",
+  "LIZARD",
+  "FROG",
+];
+
+/**
+ * Maximum number of incorrect guesses allowed.
+ * @type {number}
+ */
+const maxGuessNumber = 6;
+
+/**
+ * Array of hangman "images" made of strings representing the stages of the game.
+ * @type {string[]}
+ */
+const hangmanImg = [
+  `+---+
+|    
+|    
+|    
+===`,
+  `+---+
+|   O
+|    
+|    
+===`,
+  `+---+
+|   O
+|   |
+|    
+===`,
+  `+---+
+|   O
+|  /|
+|    
+===`,
+  `+---+
+|   O
+|  /|\\
+|    
+===`,
+  `+---+
+|   O
+|  /|\\
+|  /  
+===`,
+  `+---+
+|   O
+|  /|\\
+|  / \\
+===`,
+];
+
+/**
+ * Randomly select a word from the list and split it into an array of letters.
+ * @type {string[]}
+ */
+let wordToGuess =
+  possibleWords[getRandomInt(0, possibleWords.length - 1)].split("");
+
+/**
+ * Initialize the guessed letters array with underscores for each letter in the word that has not been guessed.
+ * @type {string[]}
+ */
+let guessedLetters = "_".repeat(wordToGuess.length).split("");
+
+/**
+ * Initialize the number of guesses left.
+ * @type {number}
+ */
+let guessesLeft = maxGuessNumber;
+
+/**
+ * Boolean to track if the game is still running.
+ * @type {boolean}
+ */
+let isGameRunning = true;
+
+/**
+ * Array to store letters that have already been guessed.
+ * @type {string[]}
+ */
+let usedLetters = [];
+
+/**
+ * Variable to track the player's total points.
+ * @type {number}
+ */
+let totalPoints = 0;
+
+/**
+ * Function to get a random integer between min and max (inclusive).
+ * @param {number} min - The minimum value.
+ * @param {number} max - The maximum value.
+ * @returns {number} - A random integer between min and max.
+ * @example
+ * console.log(getRandomInt(1, 10)); // 7
+ */
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Function to handle guessing a letter.
+ * @param {string} letter - The letter to guess.
+ * @returns {void}
+ * @example
+ * guessLetter("A");
+ */
+function guessLetter(letter) {
+  chosenLetter.textContent = `You have chosen the letter ${letter}`;
+  console.log(`You have chosen the letter ${letter}`);
+
+  // Check if the guessed letter is in the word
+  if (wordToGuess.includes(letter)) {
+    // Update the guessed letters array with the correct letter
+    guessedLetters = guessedLetters.map((guessedLetter, letterIndex) => {
+      return wordToGuess.at(letterIndex) === letter ? letter : guessedLetter;
+    });
+
+    // Add random points for a correct guess
+    totalPoints = totalPoints + getRandomInt(1, 10);
+
+    // Check if the player has guessed the entire word
+    if (!guessedLetters.includes("_")) {
+      currentStatus.textContent = `Congratulations! You found a letter!
+${hangmanImg.at(maxGuessNumber - guessesLeft)}
+You have ${totalPoints} points.
+Your current situation is: ${guessedLetters.join(" ")}
+Congratulations! You found the word!`;
+      gameOver(); // End the game
+      return;
+    }
+
+    // Display the current game state after a correct guess
+    currentStatus.textContent = `Congratulations! You found a letter!
+${hangmanImg.at(maxGuessNumber - guessesLeft)}
+You have ${totalPoints} points.
+Your current situation is: ${guessedLetters.join(" ")}
+You have ${guessesLeft} guesses left.`;
+  } else {
+    // Decrease the number of guesses left for an incorrect guess
+    guessesLeft -= 1;
+
+    // Subtract random points for an incorrect guess
+    totalPoints = totalPoints - getRandomInt(1, 10);
+
+    // Display the current game state after an incorrect guess
+    currentStatus.textContent = `Sorry, you didn't find a letter!
+${hangmanImg.at(maxGuessNumber - guessesLeft)}
+You have ${totalPoints} points.
+Your current situation is: ${guessedLetters.join(" ")}
+You have ${guessesLeft} guesses left.`;
+  }
+
+  // Check if the player has run out of guesses
+  if (guessesLeft === 0) {
+    currentStatus.textContent = `Sorry, you didn't find a letter!
+${hangmanImg.at(maxGuessNumber - guessesLeft)}
+You have ${totalPoints} points.
+Your current situation is: ${guessedLetters.join(" ")}
+GAME OVER! The word was ${wordToGuess.join("")}.`;
+    // End the game
+    gameOver();
+  }
+}
+
+/**
+ * Function to initialize the game state.
+ * Resets all variables and enables the input buttons.
+ * @returns {void}
+ */
+function gameInitializer() {
+  wordToGuess =
+    possibleWords[getRandomInt(0, possibleWords.length - 1)].split("");
+  guessedLetters = "_".repeat(wordToGuess.length).split("");
+  guessesLeft = maxGuessNumber;
+  isGameRunning = true;
+  usedLetters = [];
+  totalPoints = 0;
+  inputArea
+    .querySelectorAll("input")
+    .forEach((input) => (input.disabled = false));
+  chosenLetter.textContent = `Game Started, select a letter`;
+  currentStatus.textContent = `${hangmanImg[0]}`;
+}
+
+/**
+ * Function to end the game.
+ * Disables all input buttons and sets the game state to not running.
+ * @returns {void}
+ */
+function gameOver() {
+  isGameRunning = false;
+  inputArea
+    .querySelectorAll("input")
+    .forEach((input) => (input.disabled = true));
+}
+
+// DOM Elements
+const mainSection = document.querySelector("main section:nth-of-type(2)");
+const chosenLetter = document.createElement("p");
+const currentStatus = document.createElement("pre");
+chosenLetter.textContent = `Game Started, select a letter`;
+currentStatus.textContent = `${hangmanImg[0]}`;
+
+/**
+ * Function to create an input button with a specific letter.
+ * @param {string} letter - The letter to create a button for.
+ * @returns {HTMLInputElement} - The created input button element.
+ */
+function createInput(letter) {
+  const input = document.createElement("input");
+  input.type = "button";
+  input.id = letter;
+  input.value = letter;
+  input.classList = "letter-button";
+  input.addEventListener("click", () => {
+    input.disabled = true;
+    isGameRunning ? guessLetter(letter.toUpperCase()) : null;
+  });
+  return input;
+}
+
+/**
+ * Function to create a row of input buttons.
+ * @param {string[]} letters - An array of letters to create buttons for.
+ * @returns {HTMLDivElement} - The created row of input buttons.
+ */
+function createRow(letters) {
+  const row = document.createElement("div");
+  letters.forEach((letter) => {
+    row.appendChild(createInput(letter));
+  });
+  return row;
+}
+
+// Alphabet and Input Area
+const alphabet = "abcdefghijklmnopqrstuvwxyz";
+const inputArea = document.createElement("div");
+// Create 3 rows with letters
+const rows = [
+  alphabet.slice(0, 9), // A-I
+  alphabet.slice(9, 18), // J-R
+  alphabet.slice(18, 26), // S-Z
+];
+rows.forEach((row) => {
+  inputArea.appendChild(createRow(row.split("")));
+});
+
+// Reset Button
+const resetButton = document.createElement("button");
+resetButton.textContent = "Reset Game";
+resetButton.addEventListener("click", () => {
+  gameInitializer();
+});
+
+// Append Elements to Main Section
+mainSection.appendChild(chosenLetter);
+mainSection.appendChild(currentStatus);
+mainSection.appendChild(inputArea);
+mainSection.appendChild(resetButton);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a> on Tue Apr 29 2025 14:34:30 GMT+0200 (Ora legale dell’Europa centrale) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

@@ -1,12 +1,17 @@
 /**
- * @file script.js
- * @description This file contains the JavaScript code for the Word Guesser game.
- * @date March 2025
+ * @file main.js
+ * @description This script implements the Enhanced Word Guesser game. Players guess letters to reveal a hidden word, 
+ * with a limited number of incorrect guesses allowed. 
+ * @date April, 2025
  * @author Luca Montanaro
- *
+ * 
  * @remarks
- * This exercise demonstrates the use of arrays and random number generation in JavaScript.
- * The game selects a random word from a list and the console logs try to randomly guess the letters.
+ * This script demonstrates the use of DOM manipulation, event handling, and game logic in JavaScript. 
+ * The game includes a dynamic UI with buttons for each letter, a reset button, and real-time feedback on the player's progress.
+ * It dynamically generates a keyboard for letter input, updates the game state based on user interactions, 
+ * and provides visual feedback using a hangman-style representation. The game tracks guessed letters, remaining guesses, 
+ * and total points, and it handles game initialization and reset functionality. 
+ * This example highlights the importance of managing state and dynamically updating the UI in interactive web applications.
  */
 
 /**
@@ -188,65 +193,11 @@ GAME OVER! The word was ${wordToGuess.join("")}.`;
   }
 }
 
-const mainSection = document.querySelector("main section:nth-of-type(2)");
-
-const chosenLetter = document.createElement("p");
-const currentStatus = document.createElement("pre");
-chosenLetter.textContent = `Game Started, select a letter`;
-currentStatus.textContent = `${hangmanImg[0]}`;
-
-// Function to create an input button with a specific letter
-function createInput(letter) {
-  const input = document.createElement("input");
-  input.type = "button";
-  input.id = letter;
-  input.value = letter;
-  input.classList = "letter-button";
-  input.addEventListener("click", () => {
-    input.disabled = true;
-    isGameRunning ? guessLetter(letter.toUpperCase()) : null;
-  });
-  return input;
-}
-// Function to create a row of input buttons
-function createRow(letters) {
-  const row = document.createElement("div");
-  letters.forEach((letter) => {
-    row.appendChild(createInput(letter));
-  });
-  return row;
-}
-// Alphabet
-const alphabet = "abcdefghijklmnopqrstuvwxyz";
-// Create 3 rows with letters
-const inputArea = document.createElement("div");
-const rows = [
-  alphabet.slice(0, 9), // A-I
-  alphabet.slice(9, 18), // J-R
-  alphabet.slice(18, 26), // S-Z
-];
-rows.forEach((row) => {
-  inputArea.appendChild(createRow(row.split("")));
-});
-
-const resetButton = document.createElement("button");
-resetButton.textContent = "Reset Game";
-resetButton.addEventListener("click", () => {
-  gameInitializer();
-});
-
-mainSection.appendChild(chosenLetter);
-mainSection.appendChild(currentStatus);
-mainSection.appendChild(inputArea);
-mainSection.appendChild(resetButton);
-
-function gameOver() {
-  isGameRunning = false;
-  inputArea
-    .querySelectorAll("input")
-    .forEach((input) => (input.disabled = true));
-}
-
+/**
+ * Function to initialize the game state.
+ * Resets all variables and enables the input buttons.
+ * @returns {void}
+ */
 function gameInitializer() {
   wordToGuess =
     possibleWords[getRandomInt(0, possibleWords.length - 1)].split("");
@@ -261,3 +212,79 @@ function gameInitializer() {
   chosenLetter.textContent = `Game Started, select a letter`;
   currentStatus.textContent = `${hangmanImg[0]}`;
 }
+
+/**
+ * Function to end the game.
+ * Disables all input buttons and sets the game state to not running.
+ * @returns {void}
+ */
+function gameOver() {
+  isGameRunning = false;
+  inputArea
+    .querySelectorAll("input")
+    .forEach((input) => (input.disabled = true));
+}
+
+// DOM Elements
+const mainSection = document.querySelector("main section:nth-of-type(2)");
+const chosenLetter = document.createElement("p");
+const currentStatus = document.createElement("pre");
+chosenLetter.textContent = `Game Started, select a letter`;
+currentStatus.textContent = `${hangmanImg[0]}`;
+
+/**
+ * Function to create an input button with a specific letter.
+ * @param {string} letter - The letter to create a button for.
+ * @returns {HTMLInputElement} - The created input button element.
+ */
+function createInput(letter) {
+  const input = document.createElement("input");
+  input.type = "button";
+  input.id = letter;
+  input.value = letter;
+  input.classList = "letter-button";
+  input.addEventListener("click", () => {
+    input.disabled = true;
+    isGameRunning ? guessLetter(letter.toUpperCase()) : null;
+  });
+  return input;
+}
+
+/**
+ * Function to create a row of input buttons.
+ * @param {string[]} letters - An array of letters to create buttons for.
+ * @returns {HTMLDivElement} - The created row of input buttons.
+ */
+function createRow(letters) {
+  const row = document.createElement("div");
+  letters.forEach((letter) => {
+    row.appendChild(createInput(letter));
+  });
+  return row;
+}
+
+// Alphabet and Input Area
+const alphabet = "abcdefghijklmnopqrstuvwxyz";
+const inputArea = document.createElement("div");
+// Create 3 rows with letters
+const rows = [
+  alphabet.slice(0, 9), // A-I
+  alphabet.slice(9, 18), // J-R
+  alphabet.slice(18, 26), // S-Z
+];
+rows.forEach((row) => {
+  inputArea.appendChild(createRow(row.split("")));
+});
+
+// Reset Button
+const resetButton = document.createElement("button");
+resetButton.textContent = "Reset Game";
+resetButton.addEventListener("click", () => {
+  gameInitializer();
+});
+
+// Append Elements to Main Section
+mainSection.appendChild(chosenLetter);
+mainSection.appendChild(currentStatus);
+mainSection.appendChild(inputArea);
+mainSection.appendChild(resetButton);

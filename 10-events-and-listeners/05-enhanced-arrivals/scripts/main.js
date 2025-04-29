@@ -4,20 +4,15 @@
  * It updates flight statuses, moves flights between arrays, and renders the table in real-time.
  * @author Luca Montanaro
  * @date April, 2025
- *
- *
+ * 
  * @remarks
- * This script is designed to dynamically manage and display flight information in a table.
- * It simulates a real-time flight management system by handling incoming flights, updating their statuses,
- * and rendering the updated information in a table format.
- * Flights are periodically moved from the array`incomingFlights` to `flightsToRender`
- * to simulate the arrival of new flights.
- * The script uses a function to update the status of each flight in `flightsToRender`.
- * Flights progress through a series of predefined statuses,
- * such as "Landed," "At Gate," "Boarding," "Gate Closed," "Departing," and "In Flight."
- * Flights that reach the "In Flight" status are removed from the table after a specified delay.
- * Flights with a "Delayed" status are visually distinguished by applying a specific CSS class to their rows.
- * Additionally, it dynamically adds a stylesheet to the document head to style the table and its contents.
+ * This script simulates a real-time flight management system. It dynamically updates flight statuses, moves flights from 
+ * an incoming flights array to a rendered flights array, and displays the updated information in a table. The script 
+ * supports two views: arrivals and departures, allowing users to toggle between them. Flights progress through predefined 
+ * statuses such as "Landed," "At Gate," "Boarding," and "In Flight." Flights with a "Delayed" status are visually 
+ * distinguished using a CSS class. The script also handles user interactions, such as expanding rows to show flight details 
+ * and switching between views. It dynamically adds a stylesheet to style the table and uses interval-based updates to 
+ * simulate real-time changes.
  */
 
 /**
@@ -145,7 +140,7 @@ let flightsDatabase = [
 
 /**
  * Array of flights currently being rendered in the table.
- * @type {Array<{flightNumber: string, airline: string, comingFrom: string, goingTo: string, gate: string, scheduledDeparture: string, actualDeparture: string, scheduledArrival: string, status: string}>}
+ * @type {Array<{flightNumber: string, airline: string, comingFrom: string, goingTo: string, gate: string, scheduledDeparture: string, scheduledArrival: string, status: string}>}
  */
 let flightsToRender = [
   {
@@ -162,7 +157,7 @@ let flightsToRender = [
 
 /**
  * Generates a random integer between `min` and `max` (inclusive).
- *
+ * 
  * @param {number} min - The minimum value for the random integer.
  * @param {number} max - The maximum value for the random integer.
  * @returns {number} A random integer between `min` and `max`.
@@ -172,11 +167,10 @@ function randomInt(min, max) {
 }
 
 /**
- * Moves the first flight from `incomingFlights` to `flightsToRender`.
+ * Moves the first flight from `flightsDatabase` to `flightsToRender`.
  * @returns {void} This function does not return a value.
  */
 function incomingFlightsToRender() {
-  //moves incoming flights to rendered table array
   let flightToMove = flightsDatabase.shift();
   if (flightToMove) {
     flightsToRender.push(flightToMove);
@@ -187,22 +181,26 @@ function incomingFlightsToRender() {
  * Updates the status of each flight in `flightsToRender`.
  * Flights progress through predefined statuses such as "Landed," "At Gate," "Boarding," etc.
  * If a flight reaches the "In Flight" status, it is removed after a delay.
- *
+ * 
  * @returns {void} This function does not return a value.
  */
 function updateFlightStatus() {
-  // check there are flights to change
-  if (flightsToRender.length == 0) {
-    return;
-  }
+  if (flightsToRender.length === 0) return;
 
   flightsToRender.forEach((flight) => {
+    
     // create a randomizer for delays
     let flightDelayedRandomizer = randomInt(0, 1);
+        
     // switch status to the next and handles delays
     switch (flight.status) {
       case "Arriving":
-        flight.status = flightDelayedRandomizer == 0 ? "Landed" : "Delayed";
+        flight.status = flightDelayedRandomizer === 0 ? "Landed" : "Delayed"; //flights might land or delay
+        break;
+      case "Delayed":
+        if (flightDelayedRandomizer === 0) { //flights might stay delayed or land
+          flight.status = "Landed"; 
+        }
         break;
       case "Landed":
         flight.status = "At Gate";
@@ -214,129 +212,121 @@ function updateFlightStatus() {
         flight.status = "Gate Closed";
         break;
       case "Gate Closed":
-        break;
-      case "Delayed":
-        if (flightDelayedRandomizer == 0) {
-          flight.status = "Landed";
-        }
+        flight.status = "Departing";
         break;
       case "Departing":
         flight.status = "In Flight";
-        // removes flights after 1min if they left
-        setTimeout(removeDepartedFlight, 60000, flight);
+        setTimeout(removeDepartedFlight, 60000, flight); // removes flights after 1min they left
         break;
     }
   });
 }
 
-// Dichiarazione globale della variabile expandedRow
-let expandedRow = null; // Mantenere lo stato della riga espansa
-let expandedFlightNumber = null; // Mantenere lo stato della riga espansa
-
+/**
+ * Renders the flights in `flightsToRender` into a table.
+ * Clears the table of all rows except the header before repopulating it with updated flight information.
+ * Flights with a "Delayed" status are visually distinguished by applying a specific CSS class to their rows.
+ * 
+ * @returns {void} This function does not return a value.
+ */
 function renderFlights() {
-  // Reset della tabella prima di renderizzare
+  // Reset the table before rendering it again
   while (table.firstChild) table.removeChild(table.firstChild);
+  // checks there are flights to render
+  if (flightsToRender.length === 0) return;
 
-  // Verifica che ci siano voli da renderizzare
-  if (flightsToRender.length == 0) {
-    return;
-  }
-
-  let headerRowArrival = document.createElement("tr");
+  let headerRow = document.createElement("tr");
   let flightData = currentView === "arrivals" ? arrivalFlightsData : departureFlightsData;
   flightData.forEach((headerText) => {
     let tHead = document.createElement("th");
     tHead.textContent = headerText;
-    headerRowArrival.appendChild(tHead);
+    headerRow.appendChild(tHead);
   });
-  table.appendChild(headerRowArrival);
-  exerciseSection.appendChild(table);
+  table.appendChild(headerRow);
 
   flightsToRender.forEach((flight) => {
     let tRow = document.createElement("tr");
-
-    // Array con le informazioni del volo
+    // Array with the flight information based of they are viewed in arrival or in departure
     const flightInfos =
       currentView === "arrivals"
-        ? [flight.flightNumber, flight.airline, flight.comingFrom, flight.gate, flight.scheduledArrival, flight.status,]
-        : [flight.flightNumber, flight.airline, flight.goingTo, flight.gate, flight.scheduledDeparture, flight.status,];
+        ? [flight.flightNumber, flight.airline, flight.comingFrom, flight.gate, flight.scheduledArrival, flight.status]
+        : [flight.flightNumber, flight.airline, flight.goingTo, flight.gate, flight.scheduledDeparture, flight.status];
 
-    // Assegna la classe "delayed" alla riga se il volo è in ritardo
+    // if the flight is has the status delayed, assignts the class "delayed"
     if (flight.status === "Delayed") {
       tRow.className = "delayed";
     }
-
-    // Itera attraverso le informazioni del volo per aggiungere le celle alla riga
+    // cycled through the flight infos of the flight to add a cell of the table for each
     flightInfos.forEach((text) => {
       let tData = document.createElement("td");
       tData.textContent = text;
       tRow.appendChild(tData);
     });
 
-    // Aggiungi l'evento di clic per espandere/collassare l'accordion
+    // Adds the eventListener on the row to expand like an accordion
     tRow.addEventListener("click", (event) => {
       const clickedRow = event.currentTarget;
       expandRow(clickedRow, flight);
     });
 
     table.appendChild(tRow);
-
-    // Controlla se il volo corrente è quello espanso
+    //Checks if the currentFlight is the one that is expanded using the flight number (as an id)
     if (flight.flightNumber === expandedFlightNumber) {
-      expandRow(tRow, flight); // Espandi la riga corrispondente
+      expandRow(tRow, flight);
     }
-  })
-
+  });
 }
 
+/**
+ * Expands or collapses a row to show or hide flight details.
+ * @param {HTMLTableRowElement} row - The table row to expand or collapse.
+ * @param {Object} flight - The flight object containing details to display.
+ * @returns {void}
+ */
 function expandRow(row, flight) {
-  // Se c'è una riga espansa e non è quella appena cliccata, chiudi l'accordion
+  // If the expanded row open is not the one of the of clicked row, then close it
   if (expandedRow && expandedRow !== row) {
-    if (expandedRow.nextSibling && expandedRow.nextSibling.classList.contains("details-row")) {
-      expandedRow.nextSibling.remove(); // Rimuove la riga dei dettagli
+    if (expandedRow.nextSibling && expandedRow.nextSibling.classList.contains("details-row")) { //double check if the row expanded row exist
+      expandedRow.nextSibling.remove(); //remove the next sibling of the row with the class details-row
     }
     expandedRow.classList.remove("expanded");
   }
 
-  // Se clicchi la stessa riga, la chiudi
+  // If the same row of the expanded row is clicked, then close it
   if (row.classList.contains("expanded")) {
     if (row.nextSibling && row.nextSibling.classList.contains("details-row")) {
       row.nextSibling.remove();
     }
+    // reset classes and variables
     row.classList.remove("expanded");
-    expandedRow = null; // Resetta la riga espansa
-    expandedFlightNumber = null; // Resetta il numero del volo espanso
-  } else {
-    // Altrimenti, espandi la riga
+    expandedRow = null;
+    expandedFlightNumber = null;
+  } else { // here I create the expanded row
     const detailsRow = document.createElement("tr");
     detailsRow.classList.add("details-row");
     const detailsCell = document.createElement("td");
-    detailsCell.colSpan = 6; // Cambia il colSpan in base al numero di colonne
-    detailsCell.textContent = `Details flight number: ${flight.flightNumber} of the ${flight.airline} company, 
-      Gate: ${flight.gate}, 
-      State: ${flight.status}`;
+    detailsCell.colSpan = 6; // the cell is long all the table
+    detailsCell.textContent = `Details flight number: ${flight.flightNumber} of the ${flight.airline} company, Gate: ${flight.gate}, State: ${flight.status}`;
     detailsRow.appendChild(detailsCell);
-    row.after(detailsRow); // Aggiungi la riga dei dettagli dopo la riga cliccata
+    row.after(detailsRow);
     row.classList.add("expanded");
-    expandedRow = row; // Aggiorna expandedRow per mantenere la riga espansa
-    expandedFlightNumber = flight.flightNumber; // Salva il numero del volo espanso
+    expandedRow = row;
+    expandedFlightNumber = flight.flightNumber;
   }
 }
 
 /**
  * Removes a flight from `flightsToRender` once it departs.
- *
  * @param {Object} flightToRemove - The flight object to remove from the `flightsToRender` array.
- * @returns {void} This function does not return a value.
+ * @returns {void}
  */
 function removeDepartedFlight(flightToRemove) {
   // filter iterates an array returning a new one with the values which
   // return true in the arrow function
-  flightsToRender = flightsToRender.filter(
-    (flight) => flight !== flightToRemove
-  );
+  flightsToRender = flightsToRender.filter((flight) => flight !== flightToRemove);
 }
 
+// Interval-based updates
 setInterval(incomingFlightsToRender, 10000);
 setInterval(renderFlights, 1000);
 setInterval(updateFlightStatus, 7000);
@@ -347,12 +337,30 @@ setInterval(updateFlightStatus, 7000);
  */
 let exerciseSection = document.querySelector("main section:nth-of-type(2)");
 
+/**
+ * The button element for switching to the arrivals view.
+ * @type {HTMLButtonElement}
+ */
 const arrivalsBtn = document.createElement("button");
 arrivalsBtn.textContent = "Arrivals";
+
+/**
+ * The button element for switching to the departures view.
+ * @type {HTMLButtonElement}
+ */
 const departuresBtn = document.createElement("button");
 departuresBtn.textContent = "Departures";
+
+// Append the buttons to the exercise section
 exerciseSection.append(arrivalsBtn, departuresBtn);
 
+// Disable the arrivals button by default since the initial view is arrivals
+arrivalsBtn.disabled = true;
+
+/**
+ * Event listener for the arrivals button.
+ * Switches the view to arrivals and updates the button states.
+ */
 arrivalsBtn.addEventListener("click", () => {
   if (currentView !== "arrivals") {
     fadeOutIn(() => {
@@ -364,6 +372,10 @@ arrivalsBtn.addEventListener("click", () => {
   }
 });
 
+/**
+ * Event listener for the departures button.
+ * Switches the view to departures and updates the button states.
+ */
 departuresBtn.addEventListener("click", () => {
   if (currentView !== "departures") {
     fadeOutIn(() => {
@@ -380,9 +392,25 @@ departuresBtn.addEventListener("click", () => {
  * @type {HTMLTableElement}
  */
 let table = document.createElement("table");
+exerciseSection.appendChild(table);
 
+/**
+ * The current view of the table ("arrivals" or "departures").
+ * @type {string}
+ */
 let currentView = "arrivals";
-arrivalsBtn.disabled = true;
+
+/**
+ * The currently expanded row in the table.
+ * @type {HTMLTableRowElement | null}
+ */
+let expandedRow = null;
+
+/**
+ * The flight number of the currently expanded row.
+ * @type {string | null}
+ */
+let expandedFlightNumber = null;
 
 /**
  * The <head> element of the document where a new stylesheet is dynamically added.
@@ -399,6 +427,13 @@ newStylesheetLink.rel = "stylesheet";
 newStylesheetLink.href = "./styles/style.css";
 siteHead.appendChild(newStylesheetLink);
 
+/**
+ * Applies a fade-out effect to the table, executes a callback function, and then applies a fade-in effect.
+ * This function is used to create a smooth transition effect when switching views or updating the table.
+ * 
+ * @param {Function} callback - The function to execute after the fade-out effect is applied.
+ * @returns {void} This function does not return a value.
+ */
 function fadeOutIn(callback) {
   table.classList.add("fade-out");
   setTimeout(() => {

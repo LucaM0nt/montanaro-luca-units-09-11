@@ -1,4 +1,16 @@
 /**
+ * @file main.js
+ * @description This script provides various mathematical operations (square, half, percentage, and circle area)
+ * and dynamically updates the DOM to display the results based on user input. 
+ * @author Luca Montanaro
+ * @date April, 2025
+ * 
+ * @remarks
+ * This script demonstrates event handling, DOM manipulation, and basic mathematical calculations.
+ * It uses function from a previous exercise and enhance it adding to them the DOM manipulation aspects.
+ */
+
+/**
  * The <head> element of the document where a new stylesheet is dynamically added.
  * @type {HTMLHeadElement}
  */
@@ -66,31 +78,35 @@ console.log(`The area for a circle with radius ${radius} is ${area}`);
 return area;
 }
 
-// square event function
+/**
+ * Handles the square button click event.
+ * Retrieves the input value, calculates the square, and updates the DOM with the result.
+ * @returns {void}
+ */
 function squareEvent() {
     let number = document.querySelector("#square-input").value;
     let solution = squareNumber(number)
     let solutionDiv = document.querySelector("#solution");
     solutionDiv.textContent = `${number} squared is ${solution}`
   }
-  
-// add event listener su  #gen-button per click che esegua makeStory
-let squareButton = document.getElementById("square-button");
-squareButton.addEventListener("click", squareEvent);
 
-// half event function
+/**
+ * Handles the half button click event.
+ * Retrieves the input value, calculates half, and updates the DOM with the result.
+ * @returns {void}
+ */
 function halfEvent() {
     let number = document.querySelector("#half-input").value;
     let solution = halfNumber(number)
     let solutionDiv = document.querySelector("#solution");
     solutionDiv.textContent = `${number} halved is ${solution}`
   }
-  
-// add event listener su  #gen-button per click che esegua makeStory
-let halfButton = document.getElementById("half-button");
-halfButton.addEventListener("click", halfEvent);
 
-// percentage event function
+/**
+ * Handles the percentage button click event.
+ * Retrieves the input values, calculates the percentage, and updates the DOM with the result.
+ * @returns {void}
+ */
 function percentageEvent() {
     let percentageRate = document.querySelector("#percentage-input-rate").value;
     let percentageBase = document.querySelector("#percentage-input-base").value;
@@ -98,12 +114,12 @@ function percentageEvent() {
     let solutionDiv = document.querySelector("#solution");
     solutionDiv.textContent = `${percentageRate} is ${solution}% of ${percentageBase}`
   }
-  
-// add event listener su  #gen-button per click che esegua makeStory
-let percentageButton = document.getElementById("percentage-button");
-percentageButton.addEventListener("click", percentageEvent);
 
-// circleArea event function
+/**
+ * Handles the circle area button click event.
+ * Retrieves the input value, calculates the area of the circle, and updates the DOM with the result.
+ * @returns {void}
+ */
 function circleAreaEvent() {
     let number = document.querySelector("#circle-area-input").value;
     let solution = areaOfCircle(number)
@@ -111,7 +127,33 @@ function circleAreaEvent() {
     solutionDiv.textContent = `The area of circle with radius ${number} is ${solution}`
   }
   
-// add event listener su  #gen-button per click che esegua makeStory
+// Add event listeners for the buttons
+
+/**
+ * The button element for calculating the square of a number.
+ * @type {HTMLButtonElement}
+ */
+let squareButton = document.getElementById("square-button");
+squareButton.addEventListener("click", squareEvent);
+
+/**
+ * The button element for calculating half of a number.
+ * @type {HTMLButtonElement}
+ */
+let halfButton = document.getElementById("half-button");
+halfButton.addEventListener("click", halfEvent);
+
+/**
+ * The button element for calculating the percentage of one number relative to another.
+ * @type {HTMLButtonElement}
+ */
+let percentageButton = document.getElementById("percentage-button");
+percentageButton.addEventListener("click", percentageEvent);
+
+/**
+ * The button element for calculating the area of a circle.
+ * @type {HTMLButtonElement}
+ */
 let circleAreaButton = document.getElementById("circle-area-button");
 circleAreaButton.addEventListener("click", circleAreaEvent);
 
