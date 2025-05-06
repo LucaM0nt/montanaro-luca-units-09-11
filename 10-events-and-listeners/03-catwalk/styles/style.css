@@ -9,7 +9,5 @@ body {
 .content img {
     top: 380px;
     left: -270px;
+    transition: all 0.1ms;
 }
-
-
-  
