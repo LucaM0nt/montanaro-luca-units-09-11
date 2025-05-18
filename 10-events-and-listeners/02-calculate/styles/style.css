@@ -1,7 +1,13 @@
+/** 
+* styles.css
+*
+* These styles are the ones for the current's folder exercise
+*/
+
 .content div{
     margin-bottom: 10px;
 }
-
+/* styles the solution green*/
 #solution {
     font-weight: bold;
     color: green;

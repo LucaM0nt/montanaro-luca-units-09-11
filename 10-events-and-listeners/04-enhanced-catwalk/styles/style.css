@@ -1,13 +1,21 @@
+/** 
+* styles.css
+*
+* These styles are the ones for the current's folder exercise
+*/
+
+/*Space for the cat to walk*/
 main section:nth-of-type(2) {
  min-height: 380px;
 }
 
+/*Avoids resizing of the window when the cat walks out*/
 body {
     overflow: hidden;
 }
 
+/*Starting position of the cat*/
 .content img {
     top: 380px;
     left: -270px;
 }
-  

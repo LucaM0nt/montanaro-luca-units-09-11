@@ -1,0 +1,12 @@
+/** 
+* styles.css
+*
+* These styles are the ones for the current's folder exercise
+*/
+
+/*removes list styling*/
+ul {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
