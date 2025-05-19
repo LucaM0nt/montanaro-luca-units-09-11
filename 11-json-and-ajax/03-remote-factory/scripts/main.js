@@ -1,13 +1,41 @@
+/**
+ * @file editableCars.js
+ * @description Loads data from a JSON endpoint containing both car and factory information.
+ * Renders a list of factories with associated cars. 
+ * @author Luca Montanaro
+ * @date May, 2025
+ * 
+ * @remarks This script demonstrates editable UI rendering, structured DOM creation,
+ * and bidirectional data binding with the backend.
+ * Each car entry is expandable and editable. Updates are saved back to the server 
+ * via PUT request. Includes robust error handling and user feedback.
+ */
+
+/**
+ * Endpoint containing car and factory data in a single JSON blob.
+ * @type {string}
+ */
 const jsonBlobUrl = "https://jsonblob.com/api/jsonBlob/1373750914791432192";
 
-// Utility to clear an element
+/**
+ * Clears all child elements from a given DOM node.
+ * 
+ * @param {HTMLElement} el - The element to be cleared.
+ * @returns {void}
+ */
 function clearElement(el) {
   while (el.firstChild) {
     el.removeChild(el.firstChild);
   }
 }
 
-// Notification message
+/**
+ * Displays a temporary message to the user in a styled message box.
+ * 
+ * @param {string} message - The message text.
+ * @param {boolean} [isError=false] - Whether the message is an error (true) or success (false).
+ * @returns {void}
+ */
 function showMessage(message, isError = false) {
   let msgBox = document.querySelector(".message-box");
 
@@ -30,6 +58,16 @@ function showMessage(message, isError = false) {
   }, 3000);
 }
 
+/**
+ * Renders factories and associated cars in the DOM.
+ * Allows user to expand each car item to reveal editable fields.
+ * Saves updated values to the server and re-renders the data on success.
+ * 
+ * @param {Object} data - The full dataset containing both `cars` and `factories`.
+ * @param {Object[]} data.cars - Array of car objects.
+ * @param {Object[]} data.factories - Array of factory objects.
+ * @returns {void}
+ */
 function renderData(data) {
   if (!data || !Array.isArray(data.cars) || !Array.isArray(data.factories)) {
     showMessage("Invalid data structure received from server.", true);
@@ -38,9 +76,7 @@ function renderData(data) {
 
   const cars = data.cars;
   const factories = data.factories;
-  const contentSection = document.querySelector(
-    ".content section:nth-of-type(2)"
-  );
+  const contentSection = document.querySelector(".content section:nth-of-type(2)");
   clearElement(contentSection);
 
   const heading = document.createElement("h3");
@@ -54,6 +90,7 @@ function renderData(data) {
     factoryItem.textContent = `${factory.name} ${factory.location} (${factory.established})`;
 
     const carsList = document.createElement("ul");
+
     const assignedCars = cars.filter((car) => factory.carIds.includes(car.id));
 
     assignedCars.forEach((car) => {
@@ -65,7 +102,7 @@ function renderData(data) {
       panel.classList.add("car-panel");
       panel.style.display = "none";
 
-      // Fields
+      // Editable input fields
       const makeInput = document.createElement("input");
       makeInput.type = "text";
       makeInput.value = car.make;
@@ -97,14 +134,17 @@ function renderData(data) {
         panel.appendChild(document.createElement("br"));
       });
 
+      // Save button with PUT request logic
       const saveBtn = document.createElement("button");
       saveBtn.textContent = "Save";
       panel.appendChild(saveBtn);
 
+      // Toggle panel visibility
       carItem.addEventListener("click", () => {
         panel.style.display = panel.style.display === "none" ? "block" : "none";
       });
 
+      // Save updated car info to server
       saveBtn.addEventListener("click", () => {
         car.make = makeInput.value;
         car.model = modelInput.value;
@@ -120,11 +160,11 @@ function renderData(data) {
         })
           .then((res) => {
             if (!res.ok) throw new Error("Server responded with error");
-            return res.json(); // in case you want confirmation
+            return res.json(); // Optional, for confirmation
           })
           .then(() => {
             showMessage("Car info saved!");
-            renderData(data); // Re-render
+            renderData(data); // Re-render after saving
           })
           .catch((err) => {
             console.error(err);
@@ -143,7 +183,14 @@ function renderData(data) {
   contentSection.appendChild(factoriesList);
 }
 
-// Initial load with robust error handling
+// === Initial Data Load with Error Handling ===
+
+/**
+ * Fetches the JSON blob from the server and renders the data.
+ * Handles network or data structure errors gracefully with user feedback.
+ * 
+ * @returns {void}
+ */
 fetch(jsonBlobUrl)
   .then((res) => {
     if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
