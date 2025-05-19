@@ -1,0 +1,14 @@
+{
+  "id": "car005",
+  "make": "Subaru",
+  "model": "Outback",
+  "year": 2021,
+  "isElectric": false,
+  "features": ["All-Wheel Drive", "Navigation System", "Roof Rails"],
+  "registration": {
+    "plate": "SB-OW21",
+    "state": "Colorado",
+    "expires": "2025-08-20"
+  },
+  "previousOwner": null
+}

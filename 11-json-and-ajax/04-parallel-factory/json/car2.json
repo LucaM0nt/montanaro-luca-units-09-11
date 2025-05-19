@@ -1,0 +1,14 @@
+{
+  "id": "car002",
+  "make": "Honda",
+  "model": "Civic",
+  "year": 2018,
+  "isElectric": false,
+  "features": ["Heated Seats", "Sunroof", "Cruise Control"],
+  "registration": {
+    "plate": "ZXC-9981",
+    "state": "Texas",
+    "expires": "2025-11-30"
+  },
+  "previousOwner": null
+}

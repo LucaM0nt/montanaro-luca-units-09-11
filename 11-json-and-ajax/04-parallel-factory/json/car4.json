@@ -1,0 +1,17 @@
+{
+  "id": "car004",
+  "make": "Ford",
+  "model": "Mustang",
+  "year": 2015,
+  "isElectric": false,
+  "features": ["Leather Seats", "V8 Engine Sound", "Sport Mode"],
+  "registration": {
+    "plate": "MUS-15GT",
+    "state": "Florida",
+    "expires": "2024-12-15"
+  },
+  "previousOwner": {
+    "name": "Emily Carter",
+    "transferredOn": "2023-06-01"
+  }
+}

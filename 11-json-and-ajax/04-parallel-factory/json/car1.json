@@ -1,0 +1,14 @@
+{
+  "id": "car001",
+  "make": "Toyota",
+  "model": "Corolla",
+  "year": 2020,
+  "isElectric": false,
+  "features": ["Bluetooth", "Air Conditioning", "Backup Camera"],
+  "registration": {
+    "plate": "ABC-1234",
+    "state": "California",
+    "expires": "2026-05-10"
+  },
+  "previousOwner": null
+}

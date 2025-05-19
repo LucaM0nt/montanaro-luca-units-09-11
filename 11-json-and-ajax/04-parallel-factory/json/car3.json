@@ -1,0 +1,14 @@
+{
+  "id": "car003",
+  "make": "Tesla",
+  "model": "Model 3",
+  "year": 2023,
+  "isElectric": true,
+  "features": ["Autopilot", "Wireless Charging", "Over-the-Air Updates"],
+  "registration": {
+    "plate": "EV-2023X",
+    "state": "Nevada",
+    "expires": "2026-04-22"
+  },
+  "previousOwner": null
+}

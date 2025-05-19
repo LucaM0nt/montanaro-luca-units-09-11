@@ -1,0 +1,13 @@
+{
+  "id": "factory001",
+  "name": "Global Auto Factory",
+  "location": "Detroit, MI",
+  "established": 1985,
+  "isOperational": true,
+  "manager": {
+    "name": "Sarah Thompson",
+    "yearsOfExperience": 15
+  },
+  "lastInspection": null,
+  "carIds": ["car001", "car002", "car003", "car004", "car005"]
+}
