@@ -56,7 +56,7 @@ The script defines the following key functions (inherited from the previous exer
 4. **Slow Down**:
    - The cat's speed decreases. If the speed reaches 0, the animation stops.
 
-## Author ✍️
+## Author 
 
 **Luca Montanaro** `WDV 24-26`  
 *luca.montanaro@edu-its.it*  
