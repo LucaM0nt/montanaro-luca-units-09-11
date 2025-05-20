@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>main.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#cars">cars</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#carsHeading">carsHeading</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#carsJSON">carsJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#carsList">carsList</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#contentSection">contentSection</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#factoriesHeading">factoriesHeading</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#factoriesList">factoriesList</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#factory">factory</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#factoryJSON">factoryJSON</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">main.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file renderStaticData.js
+ * @description Parses and displays a static JSON dataset of cars and a factory.
+ * The data is hard-coded as strings and rendered directly into the HTML DOM.
+ * 
+ * @author Luca Montanaro
+ * @date May, 2025
+ * 
+ * @remarks This is a simple script intended for rendering hard-coded test data.
+ * It does not include interattività o aggiornamenti dinamici.
+ */
+
+/**
+ * A JSON string containing an array of car objects.
+ * Each car includes general information and a registration object.
+ * Some may include a `previousOwner` record.
+ * @type {string}
+ */
+const carsJSON = `[
+    {
+      "id": "car001",
+      "make": "Toyota",
+      "model": "Corolla",
+      "year": 2020,
+      "isElectric": false,
+      "features": ["Bluetooth", "Air Conditioning", "Backup Camera"],
+      "registration": {
+        "plate": "ABC-1234",
+        "state": "California",
+        "expires": "2026-05-10"
+      },
+      "previousOwner": null
+    },
+    {
+      "id": "car002",
+      "make": "Honda",
+      "model": "Civic",
+      "year": 2018,
+      "isElectric": false,
+      "features": ["Heated Seats", "Sunroof", "Cruise Control"],
+      "registration": {
+        "plate": "ZXC-9981",
+        "state": "Texas",
+        "expires": "2025-11-30"
+      },
+      "previousOwner": null
+    },
+    {
+      "id": "car003",
+      "make": "Tesla",
+      "model": "Model 3",
+      "year": 2023,
+      "isElectric": true,
+      "features": ["Autopilot", "Wireless Charging", "Over-the-Air Updates"],
+      "registration": {
+        "plate": "EV-2023X",
+        "state": "Nevada",
+        "expires": "2026-04-22"
+      },
+      "previousOwner": null
+    },
+    {
+      "id": "car004",
+      "make": "Ford",
+      "model": "Mustang",
+      "year": 2015,
+      "isElectric": false,
+      "features": ["Leather Seats", "V8 Engine Sound", "Sport Mode"],
+      "registration": {
+        "plate": "MUS-15GT",
+        "state": "Florida",
+        "expires": "2024-12-15"
+      },
+      "previousOwner": {
+        "name": "Emily Carter",
+        "transferredOn": "2023-06-01"
+      }
+    },
+    {
+      "id": "car005",
+      "make": "Subaru",
+      "model": "Outback",
+      "year": 2021,
+      "isElectric": false,
+      "features": ["All-Wheel Drive", "Navigation System", "Roof Rails"],
+      "registration": {
+        "plate": "SB-OW21",
+        "state": "Colorado",
+        "expires": "2025-08-20"
+      },
+      "previousOwner": null
+    }
+  ]`;
+
+/**
+ * A JSON string containing a single factory object.
+ * The factory includes metadata and a list of car IDs associated with it.
+ * @type {string}
+ */
+const factoryJSON = `{
+  "id": "factory001",
+  "name": "Global Auto Factory",
+  "location": "Detroit, MI",
+  "established": 1985,
+  "isOperational": true,
+  "manager": {
+    "name": "Sarah Thompson",
+    "yearsOfExperience": 15
+  },
+  "lastInspection": null,
+  "carIds": ["car001", "car002", "car003", "car004", "car005"]
+}`;
+
+/**
+ * Parsed list of cars from `carsJSON`.
+ * @type {Object[]}
+ */
+const cars = JSON.parse(carsJSON);
+
+/**
+ * Parsed factory object from `factoryJSON`.
+ * @type {Object}
+ */
+const factory = JSON.parse(factoryJSON);
+
+/**
+ * The HTML container section where content will be inserted.
+ * Targets the second `&lt;section>` inside a `.content` element.
+ * @type {HTMLElement}
+ */
+const contentSection = document.querySelector(".content section:nth-of-type(2)");
+
+/**
+ * An unordered list element to hold car information.
+ * @type {HTMLUListElement}
+ */
+const carsList = document.createElement("ul");
+
+/**
+ * An unordered list element to hold factory information.
+ * @type {HTMLUListElement}
+ */
+const factoriesList = document.createElement("ul");
+
+// === Render Cars ===
+cars.forEach((car) => {
+  const li = document.createElement("li");
+  li.textContent = `${car.make} ${car.model} (${car.year})`;
+  carsList.appendChild(li);
+});
+
+// === Render Factory ===
+const li = document.createElement("li");
+li.textContent = `${factory.name} ${factory.location} (${factory.established})`;
+factoriesList.appendChild(li);
+
+// === Append Elements to DOM ===
+
+/**
+ * Heading for the cars list.
+ * @type {HTMLHeadingElement}
+ */
+const carsHeading = document.createElement("h3");
+carsHeading.textContent = "Cars";
+contentSection.appendChild(carsHeading);
+contentSection.appendChild(carsList);
+
+/**
+ * Heading for the factory list.
+ * @type {HTMLHeadingElement}
+ */
+const factoriesHeading = document.createElement("h3");
+factoriesHeading.textContent = "Factories";
+contentSection.appendChild(factoriesHeading);
+contentSection.appendChild(factoriesList);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a> on Tue May 20 2025 20:46:54 GMT+0200 (Ora legale dell’Europa centrale) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
