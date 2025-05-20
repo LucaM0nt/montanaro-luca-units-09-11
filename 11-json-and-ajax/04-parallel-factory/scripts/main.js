@@ -32,10 +32,10 @@ const carUrls = [
 const factoryUrl = "https://jsonblob.com/api/jsonBlob/1373768259115081728";
 
 /**
- * Fetches JSON data from a given URL using XMLHttpRequest.
+ * Fetches JSON data from a given URL using XMLHttpRequest (no try-catch version).
  * 
  * @param {string} url - The URL to fetch JSON data from.
- * @param {(err: Error|null, data?: any) => void} callback - Callback function called with either an error or the parsed data.
+ * @param {(err: Error|null, data?: any) => void} callback - Callback with error or parsed JSON.
  * @returns {void}
  */
 function fetchJson(url, callback) {
@@ -43,13 +43,19 @@ function fetchJson(url, callback) {
   xhr.open("GET", url, true);
 
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          const data = JSON.parse(xhr.responseText);
+        const responseText = xhr.responseText;
+
+        // Basic check of if it might look like a JSON object or array
+        if (
+          (responseText.startsWith("{") && responseText.endsWith("}")) ||
+          (responseText.startsWith("[") && responseText.endsWith("]"))
+        ) {
+          const data = JSON.parse(responseText); 
           callback(null, data);
-        } catch (e) {
-          callback(new Error("Invalid JSON from " + url));
+        } else {
+          callback(new Error("Response is not valid JSON from " + url));
         }
       } else {
         callback(new Error("Failed to load " + url));
@@ -144,40 +150,45 @@ function renderData(factory, cars) {
  * @returns {void}
  */
 window.onload = function () {
+  // Show the loading message while data is being fetched
   showLoading();
 
-  const loadedCars = [];
-  let carsLoaded = 0;
-  let errorOccurred = false;
+  const loadedCars = [];     // Array to store the loaded car data
+  let carsLoaded = 0;        // Counter to track how many cars have been loaded
+  let errorOccurred = false; // Flag to prevent further processing on error
 
-  for (let i = 0; i < carUrls.length; i++) {
-    (function (index) {
-      fetchJson(carUrls[index], function (err, carData) {
-        if (errorOccurred) return;
+  // Iterate over each car URL and load its data
+  carUrls.forEach((url, index) => {
+    fetchJson(url, function (err, carData) {
+      // If an error has already occurred, stop processing
+      if (errorOccurred) return;
 
-        if (err) {
-          errorOccurred = true;
-          showMessage("Error loading car data: " + err.message, true);
-          console.error(err);
-          return;
-        }
+      if (err) {
+        // If an error occurs during fetch, show message and set error flag
+        errorOccurred = true;
+        showMessage("Error loading car data: " + err.message, true);
+        console.error(err);
+        return;
+      }
 
-        loadedCars[index] = carData;
-        carsLoaded++;
+      // Store the car data at the correct index
+      loadedCars[index] = carData;
+      carsLoaded++;
 
-        if (carsLoaded === carUrls.length) {
-          // All cars loaded, now fetch the factory
-          fetchJson(factoryUrl, function (err, factoryData) {
-            if (err) {
-              showMessage("Error loading factory data: " + err.message, true);
-              console.error(err);
-              return;
-            }
+      // Once all car data has been loaded, fetch the factory data
+      if (carsLoaded === carUrls.length) {
+        fetchJson(factoryUrl, function (err, factoryData) {
+          if (err) {
+            // If factory fetch fails, show error message
+            showMessage("Error loading factory data: " + err.message, true);
+            console.error(err);
+            return;
+          }
 
-            renderData(factoryData, loadedCars);
-          });
-        }
-      });
-    })(i);
-  }
+          // Render the factory information along with its associated cars
+          renderData(factoryData, loadedCars);
+        });
+      }
+    });
+  });
 };

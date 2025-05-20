@@ -37,20 +37,24 @@ function clearElement(el) {
  * @returns {void}
  */
 function showMessage(message, isError = false) {
+  // if exist i get the .message-box div
   let msgBox = document.querySelector(".message-box");
 
+  // if msgBox falsy (it doesn't exist, is empty...), then create it
   if (!msgBox) {
     msgBox = document.createElement("div");
     msgBox.className = "message-box";
     document.body.appendChild(msgBox);
   }
-
+  
+  // set text content based on parameters
   msgBox.textContent = message;
   msgBox.classList.remove("success", "error", "visible");
   msgBox.classList.add(isError ? "error" : "success", "visible");
   msgBox.style.opacity = "1";
   msgBox.style.pointerEvents = "auto";
 
+  // message appears for just 3s
   setTimeout(() => {
     msgBox.classList.remove("visible");
     msgBox.style.opacity = "0";
@@ -69,16 +73,19 @@ function showMessage(message, isError = false) {
  * @returns {void}
  */
 function renderData(data) {
+  // check if the passed data doesn't exist or is not an array
   if (!data || !Array.isArray(data.cars) || !Array.isArray(data.factories)) {
     showMessage("Invalid data structure received from server.", true);
     return;
   }
 
+  // assaign data to variables and prepare the section to be updated
   const cars = data.cars;
   const factories = data.factories;
   const contentSection = document.querySelector(".content section:nth-of-type(2)");
   clearElement(contentSection);
-
+  
+  // set heading
   const heading = document.createElement("h3");
   heading.textContent = "Factories";
   contentSection.appendChild(heading);
@@ -90,14 +97,17 @@ function renderData(data) {
     factoryItem.textContent = `${factory.name} ${factory.location} (${factory.established})`;
 
     const carsList = document.createElement("ul");
-
+    
+    // create an assigned cars array filtering for which car includes the current factory id
     const assignedCars = cars.filter((car) => factory.carIds.includes(car.id));
-
+    
+    // for each assigned car a create the respective element
     assignedCars.forEach((car) => {
       const carItem = document.createElement("li");
       carItem.textContent = `${car.make} ${car.model} (${car.year})`;
       carItem.classList.add("car-item");
 
+      // creating the collapseable panel default display is none
       const panel = document.createElement("div");
       panel.classList.add("car-panel");
       panel.style.display = "none";
@@ -119,13 +129,15 @@ function renderData(data) {
       electricInput.type = "checkbox";
       electricInput.checked = car.isElectric;
 
+      // Create the lables associated with the respective input field
       const labels = [
         ["Make: ", makeInput],
         ["Model: ", modelInput],
         ["Year: ", yearInput],
         ["Electric: ", electricInput],
       ];
-
+      
+      // foreach lable i create the input element in the dom
       labels.forEach(([text, input]) => {
         const label = document.createElement("label");
         label.textContent = text;
@@ -134,7 +146,7 @@ function renderData(data) {
         panel.appendChild(document.createElement("br"));
       });
 
-      // Save button with PUT request logic
+      // Save button that will have PUT request logic
       const saveBtn = document.createElement("button");
       saveBtn.textContent = "Save";
       panel.appendChild(saveBtn);
@@ -144,13 +156,15 @@ function renderData(data) {
         panel.style.display = panel.style.display === "none" ? "block" : "none";
       });
 
-      // Save updated car info to server
+      // Save updated car info to server through PUT request logic
       saveBtn.addEventListener("click", () => {
+        //catching the input fields values
         car.make = makeInput.value;
         car.model = modelInput.value;
         car.year = parseInt(yearInput.value);
         car.isElectric = electricInput.checked;
 
+        // fetch server put request
         fetch(jsonBlobUrl, {
           method: "PUT",
           headers: {
@@ -158,9 +172,9 @@ function renderData(data) {
           },
           body: JSON.stringify(data),
         })
+          // error in case of response not ok
           .then((res) => {
             if (!res.ok) throw new Error("Server responded with error");
-            return res.json(); // Optional, for confirmation
           })
           .then(() => {
             showMessage("Car info saved!");
@@ -171,19 +185,22 @@ function renderData(data) {
             showMessage("Failed to save changes.", true);
           });
       });
-
+      
+      // add each car item and its panel in the car list div in the dom
       carsList.appendChild(carItem);
       carsList.appendChild(panel);
     });
 
+    // add each factory to the dom with its car list
     factoriesList.appendChild(factoryItem);
     factoriesList.appendChild(carsList);
   });
 
+  // add the whole section to the dom
   contentSection.appendChild(factoriesList);
 }
 
-// === Initial Data Load with Error Handling ===
+// === Initial Data Load ===
 
 /**
  * Fetches the JSON blob from the server and renders the data.
@@ -194,9 +211,9 @@ function renderData(data) {
 fetch(jsonBlobUrl)
   .then((res) => {
     if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-    return res.json();
+    return res.json(); // data
   })
-  .then(renderData)
+  .then((data) => renderData(data))
   .catch((err) => {
     console.error(err);
     showMessage("Unable to load car data from server.", true);
