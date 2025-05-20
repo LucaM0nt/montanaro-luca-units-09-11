@@ -41,14 +41,6 @@ The factory object contains:
 - `lastInspection`: Date or `null`
 - `carIds`: Array of car IDs produced by the factory
 
-## Example Output 📤
-
-- **Cars List:**  
-  All cars are displayed as a simple list with their make, model, and year.
-
-- **Factory Info:**  
-  The factory is shown with its name, location, and year of establishment.
-
 ## Main Variables Table 📊
 
 | Variable Name   | Type             | Description                                      |
