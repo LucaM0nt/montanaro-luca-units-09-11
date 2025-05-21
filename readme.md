@@ -21,6 +21,7 @@ Alternatively, there's a handy [`index.html`](./index.html) in the main folder t
 - HTML
 - CSS
 - JavaScript
+- JSON
 
 ## Author ✍️
 
